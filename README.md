@@ -8,19 +8,195 @@
 
 ## 线程
 
-有哪几种创建线程执行任务？
+<details>
 
-为什么不建议使用工具类Excutors创建线程？
+<summary>有哪几种创建线程执行任务？</summary>
 
-线程池有哪几种状态？
+```
+// 继承Thread类，重写run方法
+// 实现Runnable接口，实现run方法
+// 实现Callable接口，实现call方法，传入FutureTask类，可以获取线程返回值
+// 线程池创建
 
-Sychronized和ReentarntLock区别？
+线程状态：
+NEW 
+RUNNABLE
+BLOCKED
+WAITING
+TIMED_WAITING
+TERMINATED
+```
 
-ThreadLocal应用场景？
+</details>
 
-ReentrantLock公平锁和非公平锁底层？
+<details>
 
-Sychronized的锁升级过程？
+<summary>为什么不建议使用工具类Excutors创建线程？</summary>
+
+<pre><code>Executors.newSingleThreadExecutor();
+Executors.newFixedThreadPool();
+<strong>Executors.newCachedThreadPool();
+</strong><strong>参数是写死的,线程无限，队列无限,会造成OOM
+</strong><strong>底层都是new ThreadPoolExecutor(int corePoolSize,
+</strong>                              int maximumPoolSize,
+                              long keepAliveTime,
+                              TimeUnit unit,
+                              BlockingQueue&#x3C;Runnable> workQueue,
+                              ThreadFactory threadFactory,
+                              RejectedExecutionHandler handler)构造
+</code></pre>
+
+</details>
+
+<details>
+
+<summary>线程池有哪几种状态？</summary>
+
+```
+// ThreadPoolExecutor线程池执行类
+runState is stored in the high-order bits
+private static final int RUNNING 正常运行 ;//既能接受新任务也能处理队列中的任务
+private static final int SHUTDOWN  正在关闭状态;//调用shutdown方法
+private static final int STOP 正常停止状态;//调用shutdownnow方法
+private static final int TIDYING ;//
+private static final int TERMINATED;//调用terminated()方法
+```
+
+</details>
+
+<details>
+
+<summary>Synchronized和ReentrantLock区别？</summary>
+
+```
+synchronized:
+关键字，非公平锁，自动加锁与释放锁，锁的是对象，底层有锁升级过程
+
+ReentrantLock：
+类，公平锁与非公平锁，手动加锁与释放锁，state标识锁的状态，没有锁升级过程
+```
+
+</details>
+
+<details>
+
+<summary>ThreadLocal应用场景？</summary>
+
+线程本地存储机制，将数据缓存在某个线程内部，该线程能在任意时刻任意方法获取缓存的数据。同一个线程内数据传递机制。
+
+经典应用场景是连接管理，一个线程持有一个连接，连接对象可以在不同方法直接进行传递。线程之间不共享同一个连接。
+
+<pre><code><strong>ThreadLocal底层由ThreadLocalMap实现。
+</strong><strong>每个Thread对象都存在一个ThreadLocalMap
+</strong><strong>Map的key为ThreadLocal对象，value为需要缓存的值
+</strong><strong>若线程池中使用ThreadLocal会造成内存泄漏。因为ThreadLocal对象使用完，
+</strong><strong>应该把设置的keyvalue回收。但线程池线程不会回收，而线程对象通过强引用指向Map
+</strong><strong>map也通过强引用指向entry对象。线程不被回收，entry对象也不会回收，会出现内存泄
+</strong><strong>解决办法：使用完threadlocal后手动调用remove方法，手动清除entry对象。
+</strong><strong>
+</strong></code></pre>
+
+</details>
+
+<details>
+
+<summary>ReentrantLock公平锁和非公平锁底层？</summary>
+
+底层实现使用AQS进行排队
+
+区别在于线程使用lock方法加锁时。
+
+</details>
+
+<details>
+
+<summary>Sychronized的锁升级过程？</summary>
+
+偏向锁
+
+轻量级锁
+
+重量级锁
+
+自旋锁
+
+</details>
+
+<details>
+
+<summary>线程安全的理解？</summary>
+
+一段代码在多个线程同时执行的情况下，是否得到正确的结果。
+
+</details>
+
+<details>
+
+<summary>守护线程的理解？</summary>
+
+用户线程和守护线程
+
+普通线程运行完就会关闭。
+
+守护线程是JVM的后台线程。其他普通线程全部关闭后，守护线程才会关闭。垃圾回收线程也是守护线程。
+
+</details>
+
+<details>
+
+<summary>并发，并行，串行理解？</summary>
+
+串行，一个任务执行完，才能执行下一个任务
+
+并行，两个任务同时执行
+
+并发，
+
+</details>
+
+<details>
+
+<summary>线程池的底层？</summary>
+
+底层是队列和线程实现
+
+</details>
+
+<details>
+
+<summary>线程池为什么先添加队列不是先创建最大线程？</summary>
+
+
+
+</details>
+
+<details>
+
+<summary>ReentrantLock中tryLock()和lock()方法的区别？</summary>
+
+
+
+</details>
+
+<details>
+
+<summary>CountDownLatch和Semaphore的区别和底层原理？</summary>
+
+
+
+</details>
+
+<details>
+
+<summary>对AQS的理解？AQS如何实现可重入锁？</summary>
+
+
+
+</details>
+
+
+
+
 
 Tomcat为什么自定义类加载器？
 
@@ -35,6 +211,10 @@ String,StringBuffer,StringBuilder区别？
 \==和equals区别？
 
 重载和重写区别？
+
+
+
+## 集合
 
 List和Set区别？
 
@@ -52,7 +232,7 @@ HashMap扩容机制？
 
 CopyOnWriteArray底层？
 
-## 集合
+
 
 ## jvm
 
@@ -78,27 +258,7 @@ STW?
 
 常用JVM启动参数有？
 
-线程安全的理解？
 
-守护线程的理解？
-
-TreadLocal的底层？
-
-并发，并行，串行理解？
-
-死锁如何避免？
-
-线程池的底层？
-
-线程池为什么先添加队列不是先创建最大线程？
-
-ReentrantLock中tryLock()和lock()方法的区别？
-
-CountDownLatch和Semaphore的区别和底层原理？
-
-Sychronized的偏向锁，轻量级锁，重量级锁？
-
-对AQS的理解？AQS如何实现可重入锁？
 
 ## Spring
 
@@ -125,6 +285,8 @@ SpringBoot中常用注解和底层实现？
 SpringBoot如何启动Tomcat?
 
 ## Mybatis
+
+死锁如何避免？
 
 mybatis优缺点？
 
