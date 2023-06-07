@@ -86,7 +86,17 @@ ReentrantLock：
 
 经典应用场景是连接管理，一个线程持有一个连接，连接对象可以在不同方法直接进行传递。线程之间不共享同一个连接。
 
-<pre><code><strong>ThreadLocal底层由ThreadLocalMap实现。
+
+
+<pre><code><strong>ThreadLocal local = new ThreadLocal();// 创建一个线程的本地变量
+</strong><strong>local.set();
+</strong><strong>local.get();
+</strong><strong>
+</strong><strong>public class Thread{
+</strong>    ThreadLocal.ThreadLocalMap threadLocals = null;
+<strong>}
+</strong>
+<strong>ThreadLocal底层由ThreadLocalMap实现。
 </strong><strong>每个Thread对象都存在一个ThreadLocalMap
 </strong><strong>Map的key为ThreadLocal对象，value为需要缓存的值
 </strong><strong>若线程池中使用ThreadLocal会造成内存泄漏。因为ThreadLocal对象使用完，
@@ -112,15 +122,19 @@ ReentrantLock：
 
 <summary>Sychronized的锁升级过程？</summary>
 
-偏向锁
+偏向锁：在锁对象的对象头记录当前锁是哪个线程占用，记录线程ID.下次又来获取该锁可直接获取。
 
-轻量级锁
+轻量级锁：由偏向锁升级，当一个线程获取该锁，这把锁是偏向锁。另一线程来竞争锁，偏向锁会升级为轻量级锁。轻量级锁通过自旋实现，不会阻塞线程。
 
-重量级锁
+重量级锁：如果自旋次数过多仍没有获取到锁，就会升级为重量级锁，重量级锁导致线程阻塞
 
-自旋锁
+自旋锁CAS
 
 </details>
+
+
+
+
 
 <details>
 
@@ -160,7 +174,11 @@ ReentrantLock：
 
 底层是队列和线程实现
 
+
+
 </details>
+
+
 
 <details>
 
@@ -190,7 +208,13 @@ ReentrantLock：
 
 <summary>对AQS的理解？AQS如何实现可重入锁？</summary>
 
+AQS是java的线程同步的框架。
 
+在AQS中，维护了一个信号量state和一个双向链表队列，其中，这个线程队列是用来给
+
+线程排队的，state相当红绿灯，控制线程排队或放行。
+
+在可重入锁场景下，state用来表示加锁的次数，0标识无锁。每加锁state加1，每释放锁，state减1
 
 </details>
 
@@ -213,134 +237,6 @@ String,StringBuffer,StringBuilder区别？
 重载和重写区别？
 
 
-
-## 集合
-
-List和Set区别？
-
-ArrayList和LinkedList区别？
-
-ConcurrentHashMap底层扩容？
-
-jdk1.7到jdk1.8HashMap区别？
-
-HashMap的put()方法？
-
-深拷贝和浅拷贝？
-
-HashMap扩容机制？
-
-CopyOnWriteArray底层？
-
-
-
-## jvm
-
-什么是字节码？
-
-异常体系？什么时候抛出异常？什么时候捕获异常？
-
-有哪些类加载器？
-
-类加载器的双亲委派机制？
-
-JVM中线程共享区？
-
-如何排查JVM问题？
-
-一个对象被加载到JVM,再到被GC清除，经历过程？
-
-确认一个对象是垃圾？
-
-垃圾回收算法？
-
-STW?
-
-常用JVM启动参数有？
-
-
-
-## Spring
-
-对IOC的理解？Spring容器启动流程？
-
-单例bean和单例模式？
-
-Spring事务传播机制？
-
-Spring中的bean是线程安全的吗?
-
-Spring中的bean创建的生命周期有哪些步骤?
-
-ApplicationContext和BeanFactory区别？
-
-Spring中的事务是如何实现的？
-
-Spring事务什么时候会生效？
-
-Spring用到哪些设计模式？
-
-SpringBoot中常用注解和底层实现？
-
-SpringBoot如何启动Tomcat?
-
-## Mybatis
-
-死锁如何避免？
-
-mybatis优缺点？
-
-Mybatis中#{}和${}区别？
-
-索引基本原理？
-
-索引设计原则？
-
-事务的基本特性和隔离级别？
-
-什么是MVCC？
-
-InnoDB和MyISAM区别？
-
-Explain语句结果各个字段分表表示什么？
-
-索引覆盖是什么？
-
-最左前缀原则？
-
-InnoDB如何实现事务？
-
-B树和B+树区别？为什么mysql使用B+树？
-
-Mysql锁有哪些？如何理解？
-
-什么是RDB和AOF?
-
-## Redis
-
-redis过期键的删除策略？
-
-简述redis事务实现？
-
-redis主从复制的核心原理？
-
-redis有哪些数据结构？分别有哪些应用场景？
-
-redis分布式锁底层实现？
-
-redis集群策略？
-
-缓存穿透，缓存击穿，缓存雪崩是什么？
-
-redis和mysql如何保存数据一致？
-
-redis持久化机制？
-
-redis单线程为什么这么快？
-
-redis事务的实现？
-
-redis看门狗机制？
 
 
 
