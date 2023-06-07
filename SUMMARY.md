@@ -7,3 +7,5 @@
 * [spring](spring.md)
 * [mybatis](mybatis.md)
 * [redis](redis.md)
+* [thread](thread.md)
+* [linux](linux.md)
