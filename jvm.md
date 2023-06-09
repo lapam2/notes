@@ -11,6 +11,8 @@
 9. 垃圾回收算法？
 10. STW?
 11. 常用JVM启动参数有？
+12. 垃圾回收器CMS（Concurrent Mark Sweep）收集器
+13. G1垃圾收集器（The Garbage-First ）
 
 
 
